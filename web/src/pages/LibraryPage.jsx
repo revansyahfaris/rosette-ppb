@@ -23,7 +23,7 @@ export default function LibraryPage() {
           {books?.map((book) => (
             <li key={book.id}>
               <Link to={`/books/${book.id}`} className="card">
-                <span className="card__icon" style={{ background: book.cover_color }}>
+                <span className="card__icon" style={{ background: book.cover_color || "var(--rose-700)" }}>
                   <BookOpen size={20} color="#fff" />
                 </span>
                 <span className="card__body">

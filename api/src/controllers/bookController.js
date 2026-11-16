@@ -26,7 +26,11 @@ export const BookController = {
       if (!name?.trim()) {
         return res.status(400).json({ error: "Field 'name' wajib diisi" });
       }
-      const book = await BookModel.create({ name: name.trim(), description, cover_color });
+      // Hanya kirim field yang diisi, supaya default dari database (cover_color) tetap terpakai
+      const payload = { name: name.trim() };
+      if (description !== undefined) payload.description = description;
+      if (cover_color) payload.cover_color = cover_color;
+      const book = await BookModel.create(payload);
       res.status(201).json(book);
     } catch (err) {
       res.status(400).json({ error: err.message });
