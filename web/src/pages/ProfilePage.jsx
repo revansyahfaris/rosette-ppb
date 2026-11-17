@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+import { BookOpenText } from "lucide-react";
 import PageHeader from "../components/PageHeader.jsx";
 
 // Halaman Profile/About, disusun seperti halaman kolofon di akhir buku
@@ -35,6 +37,11 @@ export default function ProfilePage() {
           <dt>Versi</dt>
           <dd className="mono">1.0.0</dd>
         </dl>
+
+        <Link to="/panduan" className="btn btn--ghost btn--block">
+          <BookOpenText size={17} />
+          Buka panduan lagi
+        </Link>
       </section>
     </>
   );
