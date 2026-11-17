@@ -2,16 +2,18 @@ import { supabase } from "../config/supabaseClient.js";
 import { DocumentModel } from "./documentModel.js";
 
 // Daftar snapshot tidak mengirim kolom content (bisa besar) — content hanya di detail
+// documents!inner supaya bisa difilter berdasarkan buku (documents.book_id)
 const LIST_COLUMNS =
-  "id, document_id, message, word_count, created_at, documents ( id, title, book_id )";
+  "id, document_id, message, word_count, created_at, documents!inner ( id, title, book_id, books ( id, name, cover_color ) )";
 
 export const SnapshotModel = {
-  async getAll({ documentId } = {}) {
+  async getAll({ documentId, bookId } = {}) {
     let query = supabase
       .from("snapshots")
       .select(LIST_COLUMNS)
       .order("created_at", { ascending: false });
     if (documentId) query = query.eq("document_id", documentId);
+    if (bookId) query = query.eq("documents.book_id", bookId);
     const { data, error } = await query;
     if (error) throw error;
     return data;

@@ -337,6 +337,29 @@
           }
         },
         {
+          "name": "Get Snapshots by Book",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/snapshots?book_id={{bookId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "snapshots"
+              ],
+              "query": [
+                {
+                  "key": "book_id",
+                  "value": "{{bookId}}"
+                }
+              ]
+            }
+          }
+        },
+        {
           "name": "Get Snapshot by ID",
           "request": {
             "method": "GET",

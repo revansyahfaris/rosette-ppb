@@ -36,8 +36,8 @@ export const api = {
     remove: (id) => request(`/api/documents/${id}`, { method: "DELETE" }),
   },
   snapshots: {
-    list: ({ documentId } = {}) =>
-      request(`/api/snapshots${qs({ document_id: documentId })}`),
+    list: ({ documentId, bookId } = {}) =>
+      request(`/api/snapshots${qs({ document_id: documentId, book_id: bookId })}`),
     get: (id) => request(`/api/snapshots/${id}`),
     create: (body) => request("/api/snapshots", { method: "POST", body }),
     restore: (id) => request(`/api/snapshots/${id}/restore`, { method: "POST" }),

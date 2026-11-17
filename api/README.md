@@ -25,7 +25,7 @@ Dibangun dengan Node.js + Express + Supabase, mengikuti struktur Modul 1 (config
 | POST | `/api/documents` | Body: `{ book_id, title, content? }` |
 | PUT | `/api/documents/:id` | Body: `{ title?, content?, book_id? }` (autosave) |
 | DELETE | `/api/documents/:id` | Hapus dokumen |
-| GET | `/api/snapshots?document_id=` | Riwayat snapshot (tanpa isi) |
+| GET | `/api/snapshots?document_id=&book_id=` | Riwayat snapshot (tanpa isi), bisa difilter per dokumen atau per buku |
 | GET | `/api/snapshots/:id` | Detail snapshot + isi + snapshot sebelumnya (`previous`) untuk diff |
 | POST | `/api/snapshots` | **Commit**. Body: `{ document_id, message }` |
 | POST | `/api/snapshots/:id/restore` | Kembalikan dokumen ke snapshot (isi saat ini dicadangkan otomatis) |

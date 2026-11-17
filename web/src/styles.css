@@ -297,10 +297,10 @@ code, .mono { font-family: var(--font-mono); font-size: 0.78em; letter-spacing: 
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: var(--rose-700);
+  background: var(--dot, var(--rose-700));
   box-shadow: 0 0 0 3px var(--paper);
 }
-.commit--auto::before { background: var(--paper); border: 1px dashed var(--muted); }
+.commit--auto::before { background: var(--paper); border: 1.5px dashed var(--dot, var(--muted)); }
 .commit__link {
   display: flex;
   justify-content: space-between;
@@ -313,6 +313,7 @@ code, .mono { font-family: var(--font-mono); font-size: 0.78em; letter-spacing: 
 .commit__body strong { font-weight: 600; overflow-wrap: anywhere; }
 .commit--auto .commit__body strong { font-weight: 400; font-style: italic; color: var(--muted); }
 .commit__doc { font-size: 14px; color: var(--muted); }
+.commit__doc em { font-style: italic; }
 .commit__meta {
   flex: none;
   display: flex;
@@ -326,6 +327,14 @@ code, .mono { font-family: var(--font-mono); font-size: 0.78em; letter-spacing: 
 .commit__link:hover strong { color: var(--rose-700); }
 
 .chips { display: flex; gap: var(--s2); margin-bottom: var(--s2); }
+.chips--scroll {
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin: 0 calc(-1 * var(--s4)) var(--s2);
+  padding: 0 var(--s4) var(--s1);
+}
+.chips--scroll::-webkit-scrollbar { display: none; }
+.chips--scroll .chip { flex: none; }
 .chip {
   display: inline-flex;
   align-items: center;
@@ -335,9 +344,23 @@ code, .mono { font-family: var(--font-mono); font-size: 0.78em; letter-spacing: 
   padding: var(--s1) var(--s2) var(--s1) var(--s3);
   border-radius: var(--r-sm);
   border: 1px solid var(--rose-200);
-  background: var(--rose-50);
-  color: var(--rose-800);
+  background: transparent;
+  color: var(--muted);
   cursor: pointer;
+  white-space: nowrap;
+}
+.chip.is-active { background: var(--rose-50); color: var(--rose-800); border-color: var(--rose-400); }
+.chip__swatch { width: 8px; height: 14px; border-radius: 1px; }
+.section-label__link {
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: var(--rose-700);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
 }
 
 /* ---------- Kolofon (profil) ---------- */

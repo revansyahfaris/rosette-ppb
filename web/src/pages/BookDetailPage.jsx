@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Pencil, Trash2 } from "lucide-react";
+import { History, Pencil, Trash2 } from "lucide-react";
 import PageHeader from "../components/PageHeader.jsx";
 import StateView from "../components/StateView.jsx";
 import Fab from "../components/Fab.jsx";
@@ -83,6 +83,10 @@ export default function BookDetailPage() {
         <p className="ledger">
           <span>{docs.length} naskah</span>
           <span>{formatNumber(totalWords)} kata</span>
+          <Link to={`/history?book=${id}`} className="ledger__link">
+            <History size={14} />
+            Riwayat buku ini
+          </Link>
         </p>
       )}
 

@@ -2,11 +2,12 @@ import { SnapshotModel } from "../models/snapshotModel.js";
 import { statusFromError } from "../utils/text.js";
 
 export const SnapshotController = {
-  // GET /api/snapshots?document_id=...
+  // GET /api/snapshots?document_id=...&book_id=...
   async getAll(req, res) {
     try {
       const snapshots = await SnapshotModel.getAll({
         documentId: req.query.document_id,
+        bookId: req.query.book_id,
       });
       res.json(snapshots);
     } catch (err) {
