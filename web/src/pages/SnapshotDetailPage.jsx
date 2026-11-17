@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { RotateCcw, Trash2, FileText } from "lucide-react";
+import { RotateCcw, Trash2, ArrowUpRight } from "lucide-react";
 import PageHeader from "../components/PageHeader.jsx";
 import StateView from "../components/StateView.jsx";
 import DiffView from "../components/DiffView.jsx";
@@ -8,7 +8,7 @@ import { ConfirmModal } from "../components/Modal.jsx";
 import { useToast } from "../components/Toast.jsx";
 import { api } from "../lib/api.js";
 import { drafts } from "../lib/drafts.js";
-import { useFetch, formatDate } from "../lib/useFetch.js";
+import { useFetch, formatDate, shortId, formatNumber } from "../lib/useFetch.js";
 
 const TABS = [
   { key: "changes", label: "Perubahan" },
@@ -73,15 +73,14 @@ export default function SnapshotDetailPage() {
       <StateView loading={loading} error={error} onRetry={reload}>
         {snap && (
           <>
-            <Link to={`/documents/${snap.document_id}`} className="card card--compact">
-              <span className="card__icon">
-                <FileText size={18} />
-              </span>
-              <span className="card__body">
-                <strong>{doc?.title}</strong>
-                <small>{snap.word_count} kata pada versi ini · buka dokumen</small>
-              </span>
-            </Link>
+            <p className="ledger">
+              <code>{shortId(snap.id)}</code>
+              <span>{formatNumber(snap.word_count)} kata</span>
+              <Link to={`/documents/${snap.document_id}`} className="ledger__link">
+                {doc?.title}
+                <ArrowUpRight size={14} />
+              </Link>
+            </p>
 
             <div className="tabs" role="tablist">
               {TABS.map((t) => (

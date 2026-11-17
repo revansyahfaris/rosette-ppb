@@ -192,8 +192,8 @@ export default function EditorPage() {
     saved: { icon: Check, text: "Tersimpan" },
     dirty: { icon: Loader2, text: "Mengetik…" },
     saving: { icon: Loader2, text: "Menyimpan…", spin: true },
-    offline: { icon: CloudOff, text: "Offline · disimpan di perangkat" },
-    error: { icon: CloudOff, text: "Gagal sinkron · disimpan di perangkat" },
+    offline: { icon: CloudOff, text: "Offline, aman di perangkat" },
+    error: { icon: CloudOff, text: "Belum tersinkron" },
   }[status];
 
   return (
@@ -237,16 +237,18 @@ export default function EditorPage() {
         )}
 
         <div className="editor-bar">
-          <span className={`save-status save-status--${status}`}>
-            <statusView.icon size={15} className={statusView.spin ? "spin" : ""} />
-            {statusView.text}
-          </span>
-          <span className="editor-bar__meta">
-            {words} kata · {doc?.snapshot_count ?? 0} versi
-          </span>
+          <div className="editor-bar__info">
+            <span className={`save-status save-status--${status}`}>
+              <statusView.icon size={14} className={statusView.spin ? "spin" : ""} />
+              {statusView.text}
+            </span>
+            <span className="editor-bar__meta">
+              {words} kata · {doc?.snapshot_count ?? 0} versi
+            </span>
+          </div>
           <button className="btn btn--sm" onClick={() => setCommitOpen(true)} disabled={!editor}>
             <GitCommitHorizontal size={16} />
-            Simpan Versi
+            Simpan versi
           </button>
         </div>
 

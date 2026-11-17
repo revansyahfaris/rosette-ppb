@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { FileText, Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import PageHeader from "../components/PageHeader.jsx";
 import StateView from "../components/StateView.jsx";
 import Fab from "../components/Fab.jsx";
@@ -9,7 +9,7 @@ import PromptModal from "../components/PromptModal.jsx";
 import { ConfirmModal } from "../components/Modal.jsx";
 import { useToast } from "../components/Toast.jsx";
 import { api } from "../lib/api.js";
-import { useFetch, formatDate } from "../lib/useFetch.js";
+import { useFetch, formatShort, formatNumber } from "../lib/useFetch.js";
 
 // Detail Book: info buku + daftar dokumen di dalamnya
 export default function BookDetailPage() {
@@ -64,7 +64,7 @@ export default function BookDetailPage() {
       <PageHeader
         back="/"
         title={book?.name ?? "Buku"}
-        subtitle={book ? `${docs.length} dokumen · ${totalWords} kata` : undefined}
+        subtitle={book?.description}
         actions={
           book && (
             <>
@@ -79,35 +79,37 @@ export default function BookDetailPage() {
         }
       />
 
-      {book?.description && <p className="lead">{book.description}</p>}
+      {book && (
+        <p className="ledger">
+          <span>{docs.length} naskah</span>
+          <span>{formatNumber(totalWords)} kata</span>
+        </p>
+      )}
 
       <StateView
         loading={loading}
         error={error}
         onRetry={reload}
         empty={docs.length === 0}
-        emptyText="Belum ada dokumen. Ketuk “Dokumen Baru” untuk mulai menulis."
+        emptyText="Belum ada naskah di buku ini."
       >
-        <ul className="card-list">
-          {docs.map((doc) => (
+        <h2 className="section-label">Daftar isi</h2>
+        <ol className="toc">
+          {docs.map((doc, i) => (
             <li key={doc.id}>
-              <Link to={`/documents/${doc.id}`} className="card">
-                <span className="card__icon">
-                  <FileText size={20} />
-                </span>
-                <span className="card__body">
-                  <strong>{doc.title}</strong>
-                  <small>
-                    {doc.word_count} kata · diubah {formatDate(doc.updated_at)}
-                  </small>
-                </span>
+              <Link to={`/documents/${doc.id}`} className="toc__row">
+                <span className="toc__num">{String(i + 1).padStart(2, "0")}</span>
+                <span className="toc__title">{doc.title}</span>
+                <span className="toc__leader" aria-hidden="true" />
+                <span className="toc__count">{formatNumber(doc.word_count)}</span>
               </Link>
+              <span className="toc__sub">diubah {formatShort(doc.updated_at)}</span>
             </li>
           ))}
-        </ul>
+        </ol>
       </StateView>
 
-      {book && <Fab label="Dokumen Baru" onClick={() => setNewDocOpen(true)} />}
+      {book && <Fab label="Naskah baru" onClick={() => setNewDocOpen(true)} />}
 
       <BookForm
         open={editOpen}
@@ -117,8 +119,8 @@ export default function BookDetailPage() {
       />
       <PromptModal
         open={newDocOpen}
-        title="Dokumen Baru"
-        label="Judul dokumen"
+        title="Naskah Baru"
+        label="Judul naskah"
         placeholder="mis. Bab 1 - Pendahuluan"
         submitText="Buat & Mulai Menulis"
         onClose={() => setNewDocOpen(false)}

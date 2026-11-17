@@ -38,3 +38,36 @@ export function formatDate(iso) {
     minute: "2-digit",
   });
 }
+
+// "17 Nov" (tahun ditampilkan hanya jika bukan tahun ini)
+export function formatShort(iso) {
+  if (!iso) return "";
+  const d = new Date(iso);
+  const sameYear = d.getFullYear() === new Date().getFullYear();
+  return d.toLocaleDateString("id-ID", {
+    day: "numeric",
+    month: "short",
+    ...(sameYear ? {} : { year: "numeric" }),
+  });
+}
+
+export function formatTime(iso) {
+  if (!iso) return "";
+  return new Date(iso).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
+}
+
+// Judul grup tanggal di Riwayat: "Hari ini", "Kemarin", atau "Senin, 16 November 2026"
+export function formatDay(iso) {
+  const d = new Date(iso);
+  const today = new Date();
+  const yesterday = new Date();
+  yesterday.setDate(today.getDate() - 1);
+  if (d.toDateString() === today.toDateString()) return "Hari ini";
+  if (d.toDateString() === yesterday.toDateString()) return "Kemarin";
+  return d.toLocaleDateString("id-ID", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+}
+
+// Id pendek ala hash commit Git
+export const shortId = (id = "") => id.replace(/-/g, "").slice(0, 7);
+
+export const formatNumber = (n = 0) => n.toLocaleString("id-ID");

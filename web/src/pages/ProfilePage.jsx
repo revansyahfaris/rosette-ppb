@@ -1,31 +1,39 @@
 import PageHeader from "../components/PageHeader.jsx";
 
-// Halaman Profile/About aplikasi
+// Halaman Profile/About, disusun seperti halaman kolofon di akhir buku
 export default function ProfilePage() {
   return (
     <>
-      <PageHeader title="Profil" subtitle="Tentang Rosette" />
-      <section className="about">
-        <img src="/pwa-192x192.png" alt="Logo Rosette" width={96} height={96} />
-        <h2>Rosette</h2>
-        <p className="about__tagline">Word Processor dengan Version Control</p>
-        <p>
-          Rosette membantu penulis menyimpan setiap tahap tulisannya sebagai versi
-          (snapshot), membandingkan perubahan antarversi, dan mengembalikan naskah ke
-          versi mana pun tanpa kehilangan tulisan.
+      <PageHeader title="Kolofon" subtitle="Tentang aplikasi ini" />
+
+      <section className="colophon">
+        <div className="colophon__mark">
+          <img src="/pwa-192x192.png" alt="" width={56} height={56} />
+          <div>
+            <h2>Rosette</h2>
+            <p>Pengolah kata dengan riwayat versi</p>
+          </div>
+        </div>
+
+        <p className="colophon__lede">
+          Setiap tahap tulisan bisa disimpan sebagai versi, dibandingkan kata per kata
+          dengan versi lain, lalu dikembalikan kapan saja. Sebelum mengembalikan, isi yang
+          sedang terbuka dicadangkan dulu, jadi tidak ada kalimat yang hilang.
         </p>
 
-        <dl className="about__meta">
-          <dt>Pengembang</dt>
+        <dl className="colophon__meta">
+          <dt>Disusun oleh</dt>
           <dd>Muhammad Faris Revansyah</dd>
           <dt>NIM</dt>
-          <dd>21120124130103</dd>
-          <dt>Mata kuliah</dt>
-          <dd>Praktikum Pemrograman Perangkat Bergerak 2026</dd>
-          <dt>Teknologi</dt>
-          <dd>React · Vite PWA · TipTap · Express · Supabase</dd>
+          <dd className="mono">21120124130103</dd>
+          <dt>Untuk</dt>
+          <dd>Tugas Akhir Praktikum Pemrograman Perangkat Bergerak 2026, Teknik Komputer Undip</dd>
+          <dt>Huruf</dt>
+          <dd>Cormorant Garamond, Crimson Pro, IBM Plex Mono</dd>
+          <dt>Dibangun dengan</dt>
+          <dd>React, Vite PWA, TipTap, Express, Supabase</dd>
           <dt>Versi</dt>
-          <dd>1.0.0</dd>
+          <dd className="mono">1.0.0</dd>
         </dl>
       </section>
     </>

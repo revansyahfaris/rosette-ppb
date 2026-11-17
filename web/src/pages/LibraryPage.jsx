@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { BookOpen, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import PageHeader from "../components/PageHeader.jsx";
 import StateView from "../components/StateView.jsx";
 import Fab from "../components/Fab.jsx";
 import BookForm from "../components/BookForm.jsx";
 import { useToast } from "../components/Toast.jsx";
 import { api } from "../lib/api.js";
-import { useFetch, formatDate } from "../lib/useFetch.js";
+import { useFetch, formatShort } from "../lib/useFetch.js";
 
-// Halaman utama #1 (list): daftar Book
+// Halaman utama #1 (list): daftar Book, ditampilkan sebagai sampul buku di rak
 export default function LibraryPage() {
   const navigate = useNavigate();
   const toast = useToast();
@@ -34,16 +34,19 @@ export default function LibraryPage() {
 
   return (
     <>
-      <PageHeader title="Pustaka" subtitle="Semua buku dan naskahmu" />
+      <PageHeader
+        title="Pustaka"
+        subtitle={books ? `${books.length} buku di rak` : "Semua buku dan naskahmu"}
+      />
 
-      {books?.length > 0 && (
+      {books?.length > 3 && (
         <label className="search">
-          <Search size={18} />
+          <Search size={17} />
           <input
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Cari buku…"
+            placeholder="Cari judul buku"
           />
         </label>
       )}
@@ -53,23 +56,21 @@ export default function LibraryPage() {
         error={error}
         onRetry={reload}
         empty={filtered.length === 0}
-        emptyText={query ? "Tidak ada buku yang cocok." : "Belum ada buku. Ketuk “Buku Baru” untuk mulai."}
+        emptyText={query ? "Tidak ada buku dengan judul itu." : "Rak masih kosong. Mulai dari satu buku."}
       >
-        <ul className="card-list">
+        <ul className="shelf">
           {filtered.map((book) => (
             <li key={book.id}>
-              <Link to={`/books/${book.id}`} className="card">
-                <span
-                  className="card__icon"
-                  style={{ background: book.cover_color || "var(--rose-700)" }}
-                >
-                  <BookOpen size={20} color="#fff" />
-                </span>
-                <span className="card__body">
-                  <strong>{book.name}</strong>
-                  <small>
-                    {book.document_count} dokumen · {formatDate(book.updated_at)}
-                  </small>
+              <Link
+                to={`/books/${book.id}`}
+                className="cover"
+                style={{ "--cover": book.cover_color || "#7a1f2b" }}
+              >
+                <span className="cover__title">{book.name}</span>
+                <span className="cover__meta">
+                  {book.document_count} naskah
+                  <br />
+                  {formatShort(book.updated_at)}
                 </span>
               </Link>
             </li>
@@ -77,7 +78,7 @@ export default function LibraryPage() {
         </ul>
       </StateView>
 
-      <Fab label="Buku Baru" onClick={() => setFormOpen(true)} />
+      <Fab label="Buku baru" onClick={() => setFormOpen(true)} />
       <BookForm open={formOpen} onClose={() => setFormOpen(false)} onSubmit={createBook} />
     </>
   );
