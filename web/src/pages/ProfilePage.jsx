@@ -2,11 +2,11 @@ import { Link } from "react-router-dom";
 import { BookOpenText } from "lucide-react";
 import PageHeader from "../components/PageHeader.jsx";
 
-// Halaman Profile/About, disusun seperti halaman kolofon di akhir buku
+// Halaman Profile/About (isi disusun seperti halaman kolofon di akhir buku)
 export default function ProfilePage() {
   return (
     <>
-      <PageHeader title="Kolofon" subtitle="Tentang aplikasi ini" />
+      <PageHeader title="Profil" subtitle="Tentang Rosette" />
 
       <section className="colophon">
         <div className="colophon__mark">
