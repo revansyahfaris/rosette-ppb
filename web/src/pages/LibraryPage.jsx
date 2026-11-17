@@ -39,6 +39,7 @@ export default function LibraryPage() {
         subtitle={books ? `${books.length} buku di rak` : "Semua buku dan naskahmu"}
       />
 
+      {/* Sembunyikan kotak cari kalau rak masih sedikit, biar tidak berisik */}
       {books?.length > 3 && (
         <label className="search">
           <Search size={17} />
