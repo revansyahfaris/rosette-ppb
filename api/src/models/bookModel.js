@@ -48,6 +48,8 @@ export const BookModel = {
     return data;
   },
 
+  // Bump updated_at tanpa ubah data lain, dipanggil saat dokumen anaknya berubah
+  // supaya urutan "rak buku" (sort by updated_at) ikut naik
   async touch(id) {
     const { error } = await supabase
       .from("books")
