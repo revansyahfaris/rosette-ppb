@@ -49,4 +49,4 @@ Status code: `200` OK, `201` Created, `400` input salah, `404` tidak ditemukan, 
 1. Push repo ke GitHub.
 2. Vercel → Add New → Project → import repo. Set **Root Directory** ke `api`.
 3. Tambahkan Environment Variables `SUPABASE_URL` dan `SUPABASE_KEY`, lalu Deploy.
-4. Ganti `baseUrl` di Postman ke URL Vercel untuk verifikasi.
+4. Ganti `baseUrl` di Postman ke URL Vercel untuk verifikasi, mis. `https://rosette-ppb-api.vercel.app`.

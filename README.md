@@ -3,8 +3,8 @@
 Tugas Akhir Praktikum Pemrograman Perangkat Bergerak 2026 · **Progressive Web App**
 Muhammad Faris Revansyah · 21120124130103 · Teknik Komputer, Universitas Diponegoro
 
-**Aplikasi:** https://rosette-ppb-su2m.vercel.app
-**API:** Express + Supabase, di-deploy terpisah di Vercel (lihat [`api/README.md`](api/README.md))
+**Aplikasi:** https://rosette-ppb.vercel.app
+**API:** https://rosette-ppb-api.vercel.app (Express + Supabase, dokumentasi endpoint di [`api/README.md`](api/README.md))
 
 Rosette adalah pengolah kata yang menyimpan setiap tahap tulisan sebagai **versi**.
 Versi bisa dibandingkan kata per kata dan dikembalikan kapan saja. Sebelum
@@ -39,7 +39,7 @@ mengembalikan, isi yang sedang terbuka dicadangkan otomatis, jadi tidak ada tuli
 | Minimal 5 halaman | 7 halaman: Panduan, Pustaka, Detail Buku, Editor, Riwayat, Detail Versi, Profil |
 | 2 halaman utama berisi list → detail | **Pustaka** → Detail Buku → Editor, **Riwayat** → Detail Versi |
 | Halaman Profile/About | **Profil** (tentang aplikasi dan pengembang) |
-| PWA di-deploy ke free hosting | Vercel: https://rosette-ppb-su2m.vercel.app |
+| PWA di-deploy ke free hosting | Vercel: https://rosette-ppb.vercel.app (API: https://rosette-ppb-api.vercel.app) |
 
 ## Halaman
 
@@ -91,7 +91,7 @@ npm install && npm run dev       # http://localhost:5173
 
 ## Deploy (Vercel)
 
-| Project | Root Directory | Environment Variables |
-|---|---|---|
-| API | `api` | `SUPABASE_URL`, `SUPABASE_KEY` |
-| Web | `web` | `VITE_API_URL` = URL project API (tanpa `/` di akhir) |
+| Project | Domain | Root Directory | Environment Variables |
+|---|---|---|---|
+| API | `rosette-ppb-api.vercel.app` | `api` | `SUPABASE_URL`, `SUPABASE_KEY` |
+| Web | `rosette-ppb.vercel.app` | `web` | `VITE_API_URL=https://rosette-ppb-api.vercel.app` (tanpa `/` di akhir) |
