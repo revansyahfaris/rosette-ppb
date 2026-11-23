@@ -7,6 +7,12 @@ async function request(path, { method = "GET", body } = {}) {
     headers: body ? { "Content-Type": "application/json" } : undefined,
     body: body ? JSON.stringify(body) : undefined,
   });
+  // Kalau yang datang bukan JSON (mis. VITE_API_URL salah dan yang terpanggil
+  // halaman web), tampilkan error yang jelas daripada layar kosong.
+  const isJson = (res.headers.get("content-type") || "").includes("application/json");
+  if (!isJson) {
+    throw new Error(`API tidak membalas JSON dari ${BASE_URL}. Cek VITE_API_URL lalu redeploy.`);
+  }
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data.error || `Request gagal (${res.status})`);
   return data;

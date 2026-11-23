@@ -17,7 +17,7 @@ export default function LibraryPage() {
   const [formOpen, setFormOpen] = useState(false);
   const [query, setQuery] = useState("");
 
-  const filtered = (books ?? []).filter((b) =>
+  const filtered = (Array.isArray(books) ? books : []).filter((b) =>
     b.name.toLowerCase().includes(query.trim().toLowerCase())
   );
 
