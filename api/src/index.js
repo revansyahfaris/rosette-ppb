@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import bookRoutes from "./routes/bookRoutes.js";
 import documentRoutes from "./routes/documentRoutes.js";
 import snapshotRoutes from "./routes/snapshotRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+import { requireAuth } from "./utils/auth.js";
 
 dotenv.config();
 
@@ -18,13 +20,15 @@ app.get("/", (req, res) => {
   res.json({
     name: "Rosette API",
     status: "ok",
-    endpoints: ["/api/books", "/api/documents", "/api/snapshots"],
+    endpoints: ["/api/auth", "/api/books", "/api/documents", "/api/snapshots"],
   });
 });
 
-app.use("/api/books", bookRoutes);
-app.use("/api/documents", documentRoutes);
-app.use("/api/snapshots", snapshotRoutes);
+// Login & daftar terbuka; semua data lain butuh token (Authorization: Bearer <token>)
+app.use("/api/auth", authRoutes);
+app.use("/api/books", requireAuth, bookRoutes);
+app.use("/api/documents", requireAuth, documentRoutes);
+app.use("/api/snapshots", requireAuth, snapshotRoutes);
 
 // Endpoint yang tidak dikenal
 app.use((req, res) => {

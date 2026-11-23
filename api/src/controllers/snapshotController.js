@@ -5,7 +5,7 @@ export const SnapshotController = {
   // GET /api/snapshots?document_id=...&book_id=...
   async getAll(req, res) {
     try {
-      const snapshots = await SnapshotModel.getAll({
+      const snapshots = await SnapshotModel.getAll(req.user.id, {
         documentId: req.query.document_id,
         bookId: req.query.book_id,
       });
@@ -17,7 +17,7 @@ export const SnapshotController = {
 
   async getById(req, res) {
     try {
-      const snapshot = await SnapshotModel.getById(req.params.id);
+      const snapshot = await SnapshotModel.getById(req.user.id, req.params.id);
       res.json(snapshot);
     } catch (err) {
       res.status(statusFromError(err, 404)).json({ error: err.message });
@@ -33,7 +33,7 @@ export const SnapshotController = {
           .status(400)
           .json({ error: "Field 'document_id' dan 'message' wajib diisi" });
       }
-      const snapshot = await SnapshotModel.create({
+      const snapshot = await SnapshotModel.create(req.user.id, {
         document_id,
         message: message.trim(),
       });
@@ -46,7 +46,7 @@ export const SnapshotController = {
   // POST /api/snapshots/:id/restore
   async restore(req, res) {
     try {
-      const result = await SnapshotModel.restore(req.params.id);
+      const result = await SnapshotModel.restore(req.user.id, req.params.id);
       res.json(result);
     } catch (err) {
       res.status(statusFromError(err)).json({ error: err.message });
@@ -55,10 +55,10 @@ export const SnapshotController = {
 
   async remove(req, res) {
     try {
-      const result = await SnapshotModel.remove(req.params.id);
+      const result = await SnapshotModel.remove(req.user.id, req.params.id);
       res.json(result);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(statusFromError(err)).json({ error: err.message });
     }
   },
 };

@@ -4,7 +4,7 @@ import { statusFromError } from "../utils/text.js";
 export const BookController = {
   async getAll(req, res) {
     try {
-      const books = await BookModel.getAll();
+      const books = await BookModel.getAll(req.user.id);
       res.json(books);
     } catch (err) {
       res.status(500).json({ error: err.message });
@@ -13,7 +13,7 @@ export const BookController = {
 
   async getById(req, res) {
     try {
-      const book = await BookModel.getById(req.params.id);
+      const book = await BookModel.getById(req.user.id, req.params.id);
       res.json(book);
     } catch (err) {
       res.status(statusFromError(err, 404)).json({ error: err.message });
@@ -30,10 +30,10 @@ export const BookController = {
       const payload = { name: name.trim() };
       if (description !== undefined) payload.description = description;
       if (cover_color) payload.cover_color = cover_color;
-      const book = await BookModel.create(payload);
+      const book = await BookModel.create(req.user.id, payload);
       res.status(201).json(book);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(statusFromError(err)).json({ error: err.message });
     }
   },
 
@@ -44,7 +44,7 @@ export const BookController = {
       if (name !== undefined) payload.name = name;
       if (description !== undefined) payload.description = description;
       if (cover_color !== undefined) payload.cover_color = cover_color;
-      const book = await BookModel.update(req.params.id, payload);
+      const book = await BookModel.update(req.user.id, req.params.id, payload);
       res.json(book);
     } catch (err) {
       res.status(statusFromError(err)).json({ error: err.message });
@@ -53,10 +53,10 @@ export const BookController = {
 
   async remove(req, res) {
     try {
-      const result = await BookModel.remove(req.params.id);
+      const result = await BookModel.remove(req.user.id, req.params.id);
       res.json(result);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(statusFromError(err)).json({ error: err.message });
     }
   },
 };

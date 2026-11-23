@@ -6,7 +6,7 @@ export const DocumentController = {
   // GET /api/documents?book_id=...&search=...
   async getAll(req, res) {
     try {
-      const documents = await DocumentModel.getAll({
+      const documents = await DocumentModel.getAll(req.user.id, {
         bookId: req.query.book_id,
         search: req.query.search,
       });
@@ -18,7 +18,7 @@ export const DocumentController = {
 
   async getById(req, res) {
     try {
-      const document = await DocumentModel.getById(req.params.id);
+      const document = await DocumentModel.getById(req.user.id, req.params.id);
       res.json(document);
     } catch (err) {
       res.status(statusFromError(err, 404)).json({ error: err.message });
@@ -33,22 +33,22 @@ export const DocumentController = {
           .status(400)
           .json({ error: "Field 'book_id' dan 'title' wajib diisi" });
       }
-      const document = await DocumentModel.create({
+      const document = await DocumentModel.create(req.user.id, {
         book_id,
         title: title.trim(),
         content,
       });
-      await BookModel.touch(book_id);
+      await BookModel.touch(req.user.id, book_id);
       res.status(201).json(document);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(statusFromError(err)).json({ error: err.message });
     }
   },
 
   async update(req, res) {
     try {
-      const document = await DocumentModel.update(req.params.id, req.body ?? {});
-      await BookModel.touch(document.book_id);
+      const document = await DocumentModel.update(req.user.id, req.params.id, req.body ?? {});
+      await BookModel.touch(req.user.id, document.book_id);
       res.json(document);
     } catch (err) {
       res.status(statusFromError(err)).json({ error: err.message });
@@ -57,10 +57,10 @@ export const DocumentController = {
 
   async remove(req, res) {
     try {
-      const result = await DocumentModel.remove(req.params.id);
+      const result = await DocumentModel.remove(req.user.id, req.params.id);
       res.json(result);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(statusFromError(err)).json({ error: err.message });
     }
   },
 };

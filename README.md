@@ -19,6 +19,8 @@ mengembalikan, isi yang sedang terbuka dicadangkan otomatis, jadi tidak ada tuli
 
 ## Fitur
 
+- **Akun pengguna:** daftar dan masuk dengan username + password. Setiap akun hanya melihat datanya sendiri.
+  Password disimpan sebagai hash bcrypt, sesi memakai token JWT.
 - **Buku dan naskah:** buku adalah wadah naskah. Buat, ubah, hapus, dan beri warna sampul.
 - **Editor teks kaya (TipTap):** tebal, miring, garis bawah, coret, judul, daftar, kutipan, undo/redo.
 - **Autosave:** naskah tersimpan otomatis setelah berhenti mengetik.
@@ -36,9 +38,9 @@ mengembalikan, isi yang sedang terbuka dicadangkan otomatis, jadi tidak ada tuli
 |---|---|
 | API buatan sendiri sesuai Modul 1 | `api/`: Node.js + Express + Supabase, pola config → models → controllers → routes, `.env`, deploy Vercel |
 | Bottom Navigation Bar | Pustaka · Riwayat · Profil |
-| Minimal 5 halaman | 7 halaman: Panduan, Pustaka, Detail Buku, Editor, Riwayat, Detail Versi, Profil |
+| Minimal 5 halaman | 9 halaman: Masuk, Daftar, Panduan, Pustaka, Detail Buku, Editor, Riwayat, Detail Versi, Profil |
 | 2 halaman utama berisi list → detail | **Pustaka** → Detail Buku → Editor, **Riwayat** → Detail Versi |
-| Halaman Profile/About | **Profil** (tentang aplikasi dan pengembang) |
+| Halaman Profile/About | **Profil** (akun pengguna, tentang aplikasi, dan pengembang) |
 | PWA di-deploy ke free hosting | Vercel: https://rosette-ppb.vercel.app (API: https://rosette-ppb-api.vercel.app) |
 
 ## Halaman
@@ -55,8 +57,8 @@ mengembalikan, isi yang sedang terbuka dicadangkan otomatis, jadi tidak ada tuli
 | Bagian | Stack |
 |---|---|
 | Frontend | React 19, Vite, vite-plugin-pwa (Workbox), React Router, TipTap, jsdiff, lucide-react |
-| Backend | Node.js, Express 5, @supabase/supabase-js |
-| Database | Supabase (PostgreSQL): tabel `books`, `documents`, `snapshots` |
+| Backend | Node.js, Express 5, @supabase/supabase-js, bcryptjs, jsonwebtoken |
+| Database | Supabase (PostgreSQL): tabel `users`, `books`, `documents`, `snapshots` |
 | Hosting | Vercel (dua project: `api` dan `web`) |
 
 ## Struktur
@@ -64,14 +66,16 @@ mengembalikan, isi yang sedang terbuka dicadangkan otomatis, jadi tidak ada tuli
 ```
 rosette-ppb/
 ├── api/                 REST API (pola Modul 1)
-│   ├── schema.sql       skema database Supabase
+│   ├── schema.sql       skema database Supabase (project baru)
+│   ├── migration-auth.sql  migrasi fitur login (database lama)
 │   ├── src/config       koneksi Supabase
 │   ├── src/models       query ke tabel
 │   ├── src/controllers  logika request/response
 │   ├── src/routes       pemetaan URL → controller
+│   ├── src/utils/auth.js  pembuatan & verifikasi token JWT
 │   └── Rosette-API.postman_collection.json
 ├── web/                 PWA
-│   ├── src/pages        7 halaman
+│   ├── src/pages        9 halaman
 │   ├── src/components   bottom nav, modal, toolbar editor, diff, dll.
 │   └── src/lib          client API, draft offline, util
 └── docs/screenshots
@@ -81,7 +85,7 @@ rosette-ppb/
 
 ```bash
 # 1) API: siapkan Supabase dulu (lihat api/README.md)
-cd api && cp .env.example .env   # isi SUPABASE_URL & SUPABASE_KEY
+cd api && cp .env.example .env   # isi SUPABASE_URL, SUPABASE_KEY, JWT_SECRET
 npm install && npm run dev       # http://localhost:3000
 
 # 2) Web (terminal lain)
@@ -93,5 +97,5 @@ npm install && npm run dev       # http://localhost:5173
 
 | Project | Domain | Root Directory | Environment Variables |
 |---|---|---|---|
-| API | `rosette-ppb-api.vercel.app` | `api` | `SUPABASE_URL`, `SUPABASE_KEY` |
+| API | `rosette-ppb-api.vercel.app` | `api` | `SUPABASE_URL`, `SUPABASE_KEY`, `JWT_SECRET` |
 | Web | `rosette-ppb.vercel.app` | `web` | `VITE_API_URL=https://rosette-ppb-api.vercel.app` (tanpa `/` di akhir) |
