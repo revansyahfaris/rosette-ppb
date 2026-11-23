@@ -79,39 +79,55 @@ export default function BookDetailPage() {
         }
       />
 
-      {book && (
-        <p className="ledger">
-          <span>{docs.length} naskah</span>
-          <span>{formatNumber(totalWords)} kata</span>
-          <Link to={`/history?book=${id}`} className="ledger__link">
-            <History size={14} />
-            Riwayat buku ini
-          </Link>
-        </p>
-      )}
-
-      <StateView
-        loading={loading}
-        error={error}
-        onRetry={reload}
-        empty={docs.length === 0}
-        emptyText="Belum ada naskah di buku ini."
-      >
-        <h2 className="section-label">Daftar isi</h2>
-        <ol className="toc">
-          {docs.map((doc, i) => (
-            <li key={doc.id}>
-              <Link to={`/documents/${doc.id}`} className="toc__row">
-                <span className="toc__num">{String(i + 1).padStart(2, "0")}</span>
-                <span className="toc__title">{doc.title}</span>
-                <span className="toc__leader" aria-hidden="true" />
-                <span className="toc__count">{formatNumber(doc.word_count)}</span>
+      <div className="book-layout">
+        <aside className="book-layout__aside">
+          {book && (
+            <span
+              className="cover cover--hero"
+              style={{ "--cover": book.cover_color || "#7a1f2b" }}
+              aria-hidden="true"
+            >
+              <span className="cover__title">{book.name}</span>
+              <span className="cover__meta">{docs.length} naskah</span>
+            </span>
+          )}
+          {book && (
+            <p className="ledger">
+              <span>{docs.length} naskah</span>
+              <span>{formatNumber(totalWords)} kata</span>
+              <Link to={`/history?book=${id}`} className="ledger__link">
+                <History size={14} />
+                Riwayat buku ini
               </Link>
-              <span className="toc__sub">diubah {formatShort(doc.updated_at)}</span>
-            </li>
-          ))}
-        </ol>
-      </StateView>
+            </p>
+          )}
+        </aside>
+
+        <div className="book-layout__main">
+          <StateView
+            loading={loading}
+            error={error}
+            onRetry={reload}
+            empty={docs.length === 0}
+            emptyText="Belum ada naskah di buku ini."
+          >
+            <h2 className="section-label">Daftar isi</h2>
+            <ol className="toc">
+              {docs.map((doc, i) => (
+                <li key={doc.id}>
+                  <Link to={`/documents/${doc.id}`} className="toc__row">
+                    <span className="toc__num">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="toc__title">{doc.title}</span>
+                    <span className="toc__leader" aria-hidden="true" />
+                    <span className="toc__count">{formatNumber(doc.word_count)}</span>
+                  </Link>
+                  <span className="toc__sub">diubah {formatShort(doc.updated_at)}</span>
+                </li>
+              ))}
+            </ol>
+          </StateView>
+        </div>
+      </div>
 
       {book && <Fab label="Naskah baru" onClick={() => setNewDocOpen(true)} />}
 

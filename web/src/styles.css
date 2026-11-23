@@ -762,3 +762,125 @@ code, .mono { font-family: var(--font-mono); font-size: 0.78em; letter-spacing: 
 .log--mini { margin-left: var(--s2); }
 .log--mini .commit__link { padding: var(--s2) 0; }
 .diff--mini { font-size: 17px; }
+
+/* =========================================================
+   Responsif: layar lebar (laptop/desktop)
+   Di bawah 960px tampilan tetap mobile dengan bottom navigation.
+   ========================================================= */
+.nav-brand,
+.cover--hero { display: none; }
+.split__empty { padding-top: 30vh; }
+
+@media (min-width: 960px) {
+  :root { --sidebar-w: 232px; }
+
+  .app { max-width: none; padding-left: var(--sidebar-w); }
+  .app.app--bare { padding-left: 0; }
+  .app-content { max-width: 1120px; margin: 0 auto; padding: 0 40px 72px; }
+  .app-content--bare { padding-bottom: 0; }
+
+  /* Bottom nav -> sidebar kiri */
+  .bottom-nav {
+    top: 0;
+    right: auto;
+    width: var(--sidebar-w);
+    height: auto;
+    padding: var(--s5) var(--s4);
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: var(--s1);
+    border-top: none;
+    border-right: 1px solid var(--rule);
+  }
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 var(--s3) var(--s5);
+    margin-bottom: var(--s3);
+    border-bottom: 1px solid var(--rule);
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--rose-800);
+  }
+  .nav-brand img { border-radius: var(--r-md); }
+  .bottom-nav__item {
+    flex: none;
+    max-width: none;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: var(--s3);
+    padding: 10px var(--s3);
+    font-size: 17px;
+    border-radius: var(--r-md);
+  }
+  .bottom-nav__item:hover { background: var(--rose-50); color: var(--rose-700); }
+  .bottom-nav__item.is-active { background: var(--rose-50); }
+  .bottom-nav__item.is-active::before {
+    top: 50%;
+    left: calc(-1 * var(--s4));
+    width: 3px;
+    height: 22px;
+    transform: translateY(-50%);
+  }
+
+  /* Header tidak lengket di desktop, jadi toolbar editor bisa menempel di atas */
+  .page-header { position: static; padding-top: 40px; margin-bottom: var(--s4); }
+  .page-header h1 { font-size: 42px; }
+
+  .fab {
+    right: max(40px, calc((100vw - var(--sidebar-w) - 1120px) / 2 + 40px));
+    bottom: 32px;
+  }
+  .toasts { bottom: 32px; left: calc(50% + var(--sidebar-w) / 2); }
+
+  /* Pustaka: rak lebih lebar */
+  .shelf { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 36px 28px; }
+  .cover__title { font-size: 25px; }
+
+  /* Detail buku: sampul besar di kiri, daftar isi di kanan */
+  .book-layout { display: grid; grid-template-columns: 240px 1fr; gap: 56px; align-items: start; }
+  .book-layout__aside { position: sticky; top: 32px; }
+  .book-layout__aside .ledger { flex-direction: column; align-items: flex-start; gap: var(--s2); }
+  .cover--hero { display: flex; width: 100%; margin-bottom: var(--s5); }
+  .cover--hero .cover__title { font-size: 32px; }
+  .cover--hero .cover__meta { font-size: 12px; }
+  .book-layout__main .section-label:first-child { margin-top: 0; }
+  .toc__title { font-size: 21px; }
+
+  /* Editor: lembar kertas yang lebar dan nyaman */
+  .editor-bar,
+  .editor-shell,
+  .banner { max-width: 860px; margin-left: auto; margin-right: auto; }
+  .editor-bar { margin-bottom: var(--s4); }
+  .toolbar { top: 0; padding: var(--s2); }
+  .editor-content { padding: 48px 64px 80px; font-size: 20px; }
+
+  /* Riwayat: daftar di kiri, detail di kanan */
+  .split { display: grid; grid-template-columns: minmax(320px, 400px) 1fr; gap: 40px; align-items: start; }
+  .split__detail {
+    position: sticky;
+    top: 24px;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    padding-left: 40px;
+    border-left: 1px solid var(--rule);
+  }
+  .split__detail .page-header { padding-top: 0; }
+  .split__detail .page-header h1 { font-size: 34px; }
+  .commit.is-selected .commit__link {
+    background: var(--rose-50);
+    margin-left: calc(-1 * var(--s2));
+    padding-left: var(--s2);
+    padding-right: var(--s2);
+  }
+  .commit.is-selected .commit__body strong { color: var(--rose-700); }
+
+  /* Halaman detail versi (dibuka lewat URL langsung) */
+  .panel, .tabs { max-width: 860px; }
+
+  /* Profil & panduan: lebar teks yang nyaman dibaca */
+  .colophon { max-width: 640px; }
+  .guide { max-width: 560px; margin: 0 auto; }
+}

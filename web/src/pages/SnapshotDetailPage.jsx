@@ -16,9 +16,15 @@ const TABS = [
   { key: "content", label: "Isi Versi" },
 ];
 
-// Detail Snapshot: diff terhadap versi sebelumnya / isi sekarang, restore, hapus
+// Halaman Detail Snapshot (dipakai di HP dan saat dibuka lewat URL langsung)
 export default function SnapshotDetailPage() {
   const { id } = useParams();
+  return <SnapshotDetail key={id} id={id} />;
+}
+
+// Isi detail snapshot: diff terhadap versi sebelumnya / isi sekarang, restore, hapus.
+// `embedded` = ditampilkan sebagai panel kanan di halaman Riwayat (layar lebar).
+export function SnapshotDetail({ id, embedded = false, onDeleted }) {
   const navigate = useNavigate();
   const toast = useToast();
   const { data: snap, loading, error, reload } = useFetch(() => api.snapshots.get(id), [id]);
@@ -48,7 +54,8 @@ export default function SnapshotDetailPage() {
     try {
       await api.snapshots.remove(id);
       toast("Versi dihapus");
-      navigate(`/history?document=${snap.document_id}`, { replace: true });
+      if (onDeleted) onDeleted(snap);
+      else navigate(`/history?document=${snap.document_id}`, { replace: true });
     } catch (err) {
       toast(err.message, "error");
       setBusy(false);
@@ -58,7 +65,7 @@ export default function SnapshotDetailPage() {
   return (
     <>
       <PageHeader
-        back
+        back={!embedded}
         title={snap?.message ?? "Versi"}
         subtitle={snap ? formatDate(snap.created_at) : undefined}
         actions={

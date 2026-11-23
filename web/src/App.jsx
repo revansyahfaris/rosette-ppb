@@ -19,7 +19,7 @@ export default function App() {
   const inGuide = pathname.startsWith("/panduan");
 
   return (
-    <div className="app">
+    <div className={inGuide ? "app app--bare" : "app"}>
       <main className={inGuide ? "app-content app-content--bare" : "app-content"}>
         <Routes>
           <Route

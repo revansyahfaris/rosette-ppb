@@ -14,6 +14,11 @@ export default function BottomNav() {
 
   return (
     <nav className="bottom-nav" aria-label="Navigasi utama">
+      {/* Merek hanya tampil saat navigasi menjadi sidebar (layar lebar) */}
+      <div className="nav-brand" aria-hidden="true">
+        <img src="/pwa-192x192.png" alt="" width={36} height={36} />
+        <span>Rosette</span>
+      </div>
       {TABS.map(({ to, label, icon: Icon, match }) => (
         <NavLink
           key={to}
