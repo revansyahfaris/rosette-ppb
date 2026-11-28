@@ -79,8 +79,8 @@ export default function EditorPage() {
       pending.current = html;
       drafts.save(idRef.current, html); // aman di perangkat walau offline
       setStatus("dirty");
-      clearTimeout(timer.current);
-      timer.current = setTimeout(sync, AUTOSAVE_DELAY);
+      // clearTimeout(timer.current);
+      // timer.current = setTimeout(sync, AUTOSAVE_DELAY);
     },
   });
 
@@ -95,13 +95,22 @@ export default function EditorPage() {
       .get(id)
       .then((d) => {
         if (cancelled) return;
-        setDoc(d);
-        // Ada draft lokal yang lebih baru dan berbeda dari server? Tawarkan ke pengguna.
+        // setDoc(d);
+        // // Ada draft lokal yang lebih baru dan berbeda dari server? Tawarkan ke pengguna.
+        // const draft = drafts.load(id);
+        // if (draft && draft.content !== d.content && draft.savedAt > Date.parse(d.updated_at)) {
+        //   setLocalDraft(draft);
+        // } else if (draft) {
+        //   drafts.clear(id);
+        // }
+                // Perubahan lokal (belum disimpan versi) dipakai sebagai isi editor
         const draft = drafts.load(id);
-        if (draft && draft.content !== d.content && draft.savedAt > Date.parse(d.updated_at)) {
-          setLocalDraft(draft);
-        } else if (draft) {
-          drafts.clear(id);
+        if (draft && draft.content !== d.content) {
+          pending.current = draft.content;
+          setDoc({ ...d, content: draft.content });
+        } else {
+          if (draft) drafts.clear(id);
+          setDoc(d);
         }
       })
       .catch((err) => !cancelled && setError(err.message))
@@ -116,23 +125,24 @@ export default function EditorPage() {
     if (!editor || !doc || doc.id !== id) return;
     editor.commands.setContent(doc.content || "", { emitUpdate: false });
     setWords(countWords(editor.getText()));
-    setStatus("saved");
+    // setStatus("saved");
+    setStatus(pending.current != null ? "dirty" : "saved");
     // Hanya saat dokumen berganti, bukan setiap autosave
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editor, doc?.id]);
 
   // Sinkron ulang otomatis saat kembali online, dan sebelum meninggalkan halaman
-  useEffect(() => {
-    const onOnline = () => sync();
-    const onHide = () => document.visibilityState === "hidden" && sync();
-    window.addEventListener("online", onOnline);
-    document.addEventListener("visibilitychange", onHide);
-    return () => {
-      window.removeEventListener("online", onOnline);
-      document.removeEventListener("visibilitychange", onHide);
-      sync(); // simpan sisa perubahan saat pindah halaman
-    };
-  }, [sync]);
+  // useEffect(() => {
+  //   const onOnline = () => sync();
+  //   const onHide = () => document.visibilityState === "hidden" && sync();
+  //   window.addEventListener("online", onOnline);
+  //   document.addEventListener("visibilitychange", onHide);
+  //   return () => {
+  //     window.removeEventListener("online", onOnline);
+  //     document.removeEventListener("visibilitychange", onHide);
+  //     sync(); // simpan sisa perubahan saat pindah halaman
+  //   };
+  // }, [sync]);
 
   const applyDraft = () => {
     editor.commands.setContent(localDraft.content, { emitUpdate: false });
@@ -189,9 +199,12 @@ export default function EditorPage() {
   };
 
   const statusView = {
-    saved: { icon: Check, text: "Tersimpan" },
-    dirty: { icon: Loader2, text: "Mengetik…" },
-    saving: { icon: Loader2, text: "Menyimpan…", spin: true },
+    // saved: { icon: Check, text: "Tersimpan" },
+    // dirty: { icon: Loader2, text: "Mengetik…" },
+    // saving: { icon: Loader2, text: "Menyimpan…", spin: true },
+    saved: { icon: Check, text: "Tidak ada perubahan lokal" },
+    dirty: { icon: Pencil, text: "Perubahan lokal, belum disimpan versi" },
+    saving: { icon: Loader2, text: "Menyimpan versi…", spin: true },
     offline: { icon: CloudOff, text: "Offline, aman di perangkat" },
     error: { icon: CloudOff, text: "Belum tersinkron" },
   }[status];
